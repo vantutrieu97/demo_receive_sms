@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "773066573700",
+    "firebase_url": "https://test-sms-code.firebaseio.com",
+    "project_id": "test-sms-code",
+    "storage_bucket": "test-sms-code.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773066573700:android:9ad1529f98b9c02fe87fd1",
+        "android_client_info": {
+          "package_name": "com.example.demo_receive_sms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773066573700-s5v7br9pkknb776a2cnkuanh1gcdmrqa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeRXz-fmifaSEpffBMGaCYjt3LfOLJSkE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773066573700-s5v7br9pkknb776a2cnkuanh1gcdmrqa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
