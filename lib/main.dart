@@ -19,23 +19,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget with CodeAutoFill {
+class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
-
-  @override
-  void codeUpdated() {
-    // Tu ngu dang lam doan nay
-    // TODO: implement codeUpdated
-  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with CodeAutoFill {
   String _code = "";
+  bool isFirst = true;
   String _signature = "{{ app signature }}";
   String _currentPhoneNumber = "";
   final SmsAutoFill smsAutoFillInstance = SmsAutoFill();
@@ -52,8 +47,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _getCurrentPhoneNumber() async {
-    _currentPhoneNumber = await smsAutoFillInstance.hint;
+    final SmsAutoFill _autoFill = SmsAutoFill();
+    String a, b;
+    _autoFill.hint.then(
+        (value) => {
+              a = "123",
+            },
+        onError: (error) => {
+              b = "abc",
+            });
+    _currentPhoneNumber = await SmsAutoFill().hint;
     debugPrint("debugPrint   [currentPhoneNumber] : $_currentPhoneNumber");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _startListenCode();
+    _getAppSignature();
   }
 
   @override
@@ -63,45 +75,49 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       backgroundColor: Colors.grey,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'App\'s signature: $_signature',
-              style: TextStyle(color: Colors.white, fontSize: 24),
-            ),
-            Text(
-              'Dynamic code: $_code',
-              style: TextStyle(color: Colors.white, fontSize: 24),
-            ),
-            Text(
-              'Phone number: $_currentPhoneNumber',
-              style: TextStyle(color: Colors.white, fontSize: 24),
-            ),
-            SizedBox(
-              height: 24,
-            ),
-            FlatButton(
-              onPressed: _getCurrentPhoneNumber,
-              child: Container(
-                color: Colors.black,
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Current phone number",
-                  style: TextStyle(color: Colors.white, fontSize: 24),
-                ),
+      body: Container(
+        child: Stack(
+          children: [
+            Container(
+              color: Colors.transparent,
+              child: PinFieldAutoFill(
+                codeLength: 6,
+                onCodeChanged: (value) => {onGetCode(value)},
               ),
             ),
-            FlatButton(
-              onPressed: _getAppSignature,
-              child: Container(
-                color: Colors.black,
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Get app signature",
-                  style: TextStyle(color: Colors.white, fontSize: 24),
-                ),
+            Container(
+              color: Colors.grey,
+              constraints: BoxConstraints.expand(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'App\'s signature: $_signature',
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
+                  Text(
+                    'Dynamic code: $_code',
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
+                  Text(
+                    'Phone number: $_currentPhoneNumber',
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
+                  SizedBox(
+                    height: 60,
+                  ),
+                  FlatButton(
+                    onPressed: _getCurrentPhoneNumber,
+                    child: Container(
+                      color: Colors.black,
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        "Current phone number",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -112,5 +128,23 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  @override
+  void codeUpdated() {
+    setState(() {
+      _code = code;
+    });
+    // TODO: implement codeUpdated
+  }
+
+  void onGetCode(String str) {
+    if (str.isEmpty) {
+      String a = "sdasd";
+    } else {
+      setState(() {
+        _code = str;
+      });
+    }
   }
 }
