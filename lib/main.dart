@@ -36,17 +36,24 @@ class MyHomePage extends StatefulWidget with CodeAutoFill {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _code = "";
-  String signature = "{{ app signature }}";
+  String _signature = "{{ app signature }}";
+  String _currentPhoneNumber = "";
+  final SmsAutoFill smsAutoFillInstance = SmsAutoFill();
 
   void _startListenCode() async {
     print("Start listen code: ");
-    await SmsAutoFill().listenForCode;
+    await smsAutoFillInstance.listenForCode;
   }
 
   void _getAppSignature() async {
-    signature = await SmsAutoFill().getAppSignature;
-    print("app signature: $signature");
+    _signature = await smsAutoFillInstance.getAppSignature;
+    print("app signature: $_signature");
     setState(() {});
+  }
+
+  void _getCurrentPhoneNumber() async {
+    _currentPhoneNumber = await smsAutoFillInstance.hint;
+    debugPrint("debugPrint   [currentPhoneNumber] : $_currentPhoneNumber");
   }
 
   @override
@@ -55,29 +62,53 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
+      backgroundColor: Colors.grey,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              'App\'s signature: $_signature',
+              style: TextStyle(color: Colors.white, fontSize: 24),
             ),
             Text(
-              '$_code',
-              style: Theme.of(context).textTheme.headline4,
+              'Dynamic code: $_code',
+              style: TextStyle(color: Colors.white, fontSize: 24),
             ),
-            GestureDetector(
-              onTap: _getAppSignature,
+            Text(
+              'Phone number: $_currentPhoneNumber',
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            FlatButton(
+              onPressed: _getCurrentPhoneNumber,
               child: Container(
-                child: Text("Get app signature"),
+                color: Colors.black,
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Current phone number",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
               ),
-            )
+            ),
+            FlatButton(
+              onPressed: _getAppSignature,
+              child: Container(
+                color: Colors.black,
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Get app signature",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+              ),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _startListenCode,
-        tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
     );
